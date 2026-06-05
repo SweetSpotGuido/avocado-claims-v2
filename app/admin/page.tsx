@@ -4,86 +4,218 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
+type Claim = {
+    id: number
+    order_number: string
+    customer_name: string
+    whatsapp: string
+    product_name: string
+    issue: string
+    image_url: string | null
+    status: string
+}
+
 export default function AdminPage() {
-  const router = useRouter()
+    const router = useRouter()
 
-  const [loading, setLoading] = useState(true)
-  const [claims, setClaims] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
+    const [claims, setClaims] = useState<Claim[]>([])
 
-  useEffect(() => {
-    checkSession()
-  }, [])
+    useEffect(() => {
+        checkSession()
+    }, [])
 
-  async function checkSession() {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession()
+    async function checkSession() {
+        const {
+            data: { session },
+        } = await supabase.auth.getSession()
 
-    if (!session) {
-      router.push('/login')
-      return
+        if (!session) {
+            router.push('/login')
+            return
+        }
+
+        const { data, error } = await supabase
+            .from('claims')
+            .select('*')
+            .order('created_at', { ascending: false })
+
+        if (error) {
+            console.error(error)
+        }
+
+        setClaims(data || [])
+        setLoading(false)
     }
 
-    const { data } = await supabase
-      .from('claims')
-      .select('*')
-      .order('created_at', { ascending: false })
+    async function logout() {
+        await supabase.auth.signOut()
+        router.push('/login')
+    }
 
-    setClaims(data || [])
-    setLoading(false)
-  }
+    async function updateStatus(
+        claimId: number,
+        newStatus: string
+    ) {
+        const { error } = await supabase
+            .from('claims')
+            .update({
+                status: newStatus,
+            })
+            .eq('id', claimId)
 
-  async function logout() {
-    await supabase.auth.signOut()
-    router.push('/login')
-  }
+        if (error) {
+            alert('Error actualizando estado')
+            console.error(error)
+            return
+        }
 
-  if (loading) {
-    return <div className="p-8">Cargando...</div>
-  }
+        setClaims((prev) =>
+            prev.map((claim) =>
+                claim.id === claimId
+                    ? { ...claim, status: newStatus }
+                    : claim
+            )
+        )
+    }
 
-  return (
-    <main className="max-w-6xl mx-auto p-8">
-      <div className="flex justify-between mb-6">
-        <h1 className="text-3xl font-bold">
-          Tickets
-        </h1>
+    if (loading) {
+        return (
+            <div className="p-8">
+                Cargando...
+            </div>
+        )
+    }
 
-        <button
-          onClick={logout}
-          className="bg-red-600 text-white px-4 py-2 rounded"
-        >
-          Cerrar sesión
-        </button>
-      </div>
+    return (
+        <main className="max-w-7xl mx-auto p-8">
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-3xl font-bold">
+                    Avocado Claims
+                </h1>
 
-      <table className="w-full border">
-        <thead>
-          <tr className="border-b">
-            <th className="p-2">ID</th>
-            <th className="p-2">Orden</th>
-            <th className="p-2">Cliente</th>
-            <th className="p-2">WhatsApp</th>
-            <th className="p-2">Producto</th>
-            <th className="p-2">Problema</th>
-            <th className="p-2">Estado</th>
-          </tr>
-        </thead>
+                <button
+                    onClick={logout}
+                    className="bg-red-600 text-white px-4 py-2 rounded"
+                >
+                    Cerrar sesión
+                </button>
+            </div>
 
-        <tbody>
-          {claims.map((claim) => (
-            <tr key={claim.id} className="border-b">
-              <td className="p-2">{claim.id}</td>
-              <td className="p-2">{claim.order_number}</td>
-              <td className="p-2">{claim.customer_name}</td>
-              <td className="p-2">{claim.whatsapp}</td>
-              <td className="p-2">{claim.product_name}</td>
-              <td className="p-2">{claim.issue}</td>
-              <td className="p-2">{claim.status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </main>
-  )
+            <table className="w-full border border-gray-300">
+                <thead>
+                    <tr className="border-b bg-gray-100">
+                        <th className="p-2">ID</th>
+                        <th className="p-2">Orden</th>
+                        <th className="p-2">Cliente</th>
+                        <th className="p-2">WhatsApp</th>
+                        <th className="p-2">Producto</th>
+                        <th className="p-2">Problema</th>
+                        <th className="p-2">Foto</th>
+                        <th className="p-2">Estado</th>
+                        <th className="p-2">Contacto</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {claims.map((claim) => (
+                        <tr
+                            key={claim.id}
+                            className="border-b"
+                        >
+                            <td className="p-2">
+                                <a
+                                    href={`/admin/ticket/${claim.id}`}
+                                    className="text-blue-600 underline"
+                                >
+                                    #{claim.id}
+                                </a>
+                            </td>
+
+                            <td className="p-2">
+                                {claim.order_number}
+                            </td>
+
+                            <td className="p-2">
+                                {claim.customer_name}
+                            </td>
+
+                            <td className="p-2">
+                                {claim.whatsapp}
+                            </td>
+
+                            <td className="p-2">
+                                {claim.product_name}
+                            </td>
+
+                            <td className="p-2 max-w-xs">
+                                {claim.issue}
+                            </td>
+
+                            <td className="p-2">
+                                {claim.image_url ? (
+                                    <a
+                                        href={claim.image_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <img
+                                            src={claim.image_url}
+                                            alt="Reclamo"
+                                            className="w-20 h-20 object-cover border rounded"
+                                        />
+                                    </a>
+                                ) : (
+                                    '-'
+                                )}
+                            </td>
+
+                            <td className="p-2">
+                                <select
+                                    value={claim.status}
+                                    onChange={(e) =>
+                                        updateStatus(
+                                            claim.id,
+                                            e.target.value
+                                        )
+                                    }
+                                    className="border rounded p-1"
+                                >
+                                    <option value="Abierto">
+                                        Abierto
+                                    </option>
+
+                                    <option value="En revisión">
+                                        En revisión
+                                    </option>
+
+                                    <option value="Esperando cliente">
+                                        Esperando cliente
+                                    </option>
+
+                                    <option value="Resuelto">
+                                        Resuelto
+                                    </option>
+                                </select>
+                            </td>
+
+                            <td className="p-2">
+                                <a
+                                    href={`https://wa.me/${claim.whatsapp.replace(
+                                        /\D/g,
+                                        ''
+                                    )}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-green-600 font-semibold"
+                                >
+                                    💬 WhatsApp
+                                </a>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </main>
+    )
 }
