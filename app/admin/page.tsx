@@ -71,6 +71,16 @@ export default function AdminPage() {
             return
         }
 
+        await supabase
+            .from('claim_events')
+            .insert([
+                {
+                    claim_id: claimId,
+                    event_type: 'status_change',
+                    description: `Estado cambiado a ${newStatus}`,
+                },
+            ])
+
         setClaims((prev) =>
             prev.map((claim) =>
                 claim.id === claimId

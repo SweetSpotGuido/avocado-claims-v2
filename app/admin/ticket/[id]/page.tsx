@@ -12,6 +12,7 @@ export default function TicketDetailPage() {
     const [claim, setClaim] = useState<any>(null)
     const [notes, setNotes] = useState('')
     const [customerMessage, setCustomerMessage] = useState('')
+    const [events, setEvents] = useState<any[]>([])
 
     useEffect(() => {
         loadTicket()
@@ -38,6 +39,17 @@ export default function TicketDetailPage() {
             return
         }
 
+        const { data: eventsData } =
+            await supabase
+                .from('claim_events')
+                .select('*')
+                .eq('claim_id', params.id)
+                .order('created_at', {
+                    ascending: false,
+                })
+
+        setEvents(eventsData || [])
+
         setClaim(data)
         setNotes(data.internal_notes || '')
         setCustomerMessage(
@@ -60,6 +72,16 @@ export default function TicketDetailPage() {
         }
 
         alert('Notas guardadas')
+
+        await supabase
+            .from('claim_events')
+            .insert([
+                {
+                    claim_id: claim.id,
+                    event_type: 'note',
+                    description: 'Nota interna actualizada',
+                },
+            ])
     }
 
     async function saveCustomerMessage() {
@@ -76,6 +98,17 @@ export default function TicketDetailPage() {
         }
 
         alert('Mensaje guardado')
+
+        await supabase
+            .from('claim_events')
+            .insert([
+                {
+                    claim_id: claim.id,
+                    event_type: 'customer_message',
+                    description:
+                        'Mensaje para cliente actualizado',
+                },
+            ])
     }
 
     if (loading) {
@@ -164,6 +197,31 @@ export default function TicketDetailPage() {
                     <h2 className="text-xl font-bold mb-2">
                         Notas internas
                     </h2>
+
+                    <div className="mt-8">
+                        <h2 className="text-xl font-bold mb-3">
+                            Historial
+                        </h2>
+
+                        <div className="space-y-2">
+                            {events.map((event) => (
+                                <div
+                                    key={event.id}
+                                    className="border rounded p-3"
+                                >
+                                    <div className="font-medium">
+                                        {event.description}
+                                    </div>
+
+                                    <div className="text-sm text-gray-500">
+                                        {new Date(
+                                            event.created_at
+                                        ).toLocaleString()}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
                     <textarea
                         value={notes}

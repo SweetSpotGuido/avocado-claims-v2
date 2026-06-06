@@ -66,6 +66,17 @@ export default function ReembolsoPage() {
             return
         }
 
+        await supabase
+            .from('claim_events')
+            .insert([
+                {
+                    claim_id: Number(ticketId),
+                    event_type: 'refund_info',
+                    description:
+                        'Cliente cargó datos de reembolso',
+                },
+            ])
+
         setSuccess(true)
     }
 

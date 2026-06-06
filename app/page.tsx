@@ -72,6 +72,16 @@ export default function Home() {
 
         setTicketNumber(data.id)
 
+        await supabase
+            .from('claim_events')
+            .insert([
+                {
+                    claim_id: data.id,
+                    event_type: 'ticket_created',
+                    description: 'Ticket creado',
+                },
+            ])
+
         setSuccess(true)
 
         setForm({
