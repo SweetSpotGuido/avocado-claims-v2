@@ -92,6 +92,22 @@ export default function AdminPage() {
             .includes(search.toLowerCase())
     )
 
+    const openCount = claims.filter(
+        (c) => c.status === 'Abierto'
+    ).length
+
+    const reviewCount = claims.filter(
+        (c) => c.status === 'En revisión'
+    ).length
+
+    const waitingCount = claims.filter(
+        (c) => c.status === 'Esperando cliente'
+    ).length
+
+    const resolvedCount = claims.filter(
+        (c) => c.status === 'Resuelto'
+    ).length
+
     if (loading) {
         return (
             <div className="p-8">
@@ -113,6 +129,50 @@ export default function AdminPage() {
                 >
                     Cerrar sesión
                 </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+
+                <div className="border rounded p-4">
+                    <div className="text-sm text-gray-500">
+                        Abiertos
+                    </div>
+
+                    <div className="text-3xl font-bold">
+                        {openCount}
+                    </div>
+                </div>
+
+                <div className="border rounded p-4">
+                    <div className="text-sm text-gray-500">
+                        En revisión
+                    </div>
+
+                    <div className="text-3xl font-bold">
+                        {reviewCount}
+                    </div>
+                </div>
+
+                <div className="border rounded p-4">
+                    <div className="text-sm text-gray-500">
+                        Esperando cliente
+                    </div>
+
+                    <div className="text-3xl font-bold">
+                        {waitingCount}
+                    </div>
+                </div>
+
+                <div className="border rounded p-4">
+                    <div className="text-sm text-gray-500">
+                        Resueltos
+                    </div>
+
+                    <div className="text-3xl font-bold">
+                        {resolvedCount}
+                    </div>
+                </div>
+
             </div>
 
             <div className="mb-4">
