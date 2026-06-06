@@ -13,6 +13,7 @@ export default function Home() {
         order_number: '',
         customer_name: '',
         whatsapp: '',
+        email: '',
         product_name: '',
         issue: '',
     })
@@ -54,6 +55,7 @@ export default function Home() {
                     order_number: form.order_number,
                     customer_name: form.customer_name,
                     whatsapp: form.whatsapp,
+                    email: form.email,
                     product_name: form.product_name,
                     issue: form.issue,
                     image_url: imageUrl,
@@ -72,6 +74,23 @@ export default function Home() {
 
         setTicketNumber(data.id)
 
+        await fetch(
+            '/api/send-ticket-email',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type':
+                        'application/json',
+                },
+                body: JSON.stringify({
+                    email: form.email,
+                    customerName:
+                        form.customer_name,
+                    ticketId: data.id,
+                }),
+            }
+        )
+
         await supabase
             .from('claim_events')
             .insert([
@@ -88,6 +107,7 @@ export default function Home() {
             order_number: '',
             customer_name: '',
             whatsapp: '',
+            email: '',
             product_name: '',
             issue: '',
         })
@@ -160,6 +180,20 @@ export default function Home() {
                         setForm({
                             ...form,
                             whatsapp: e.target.value,
+                        })
+                    }
+                    className="border p-3 rounded"
+                    required
+                />
+
+                <input
+                    type="email"
+                    placeholder="Correo electrónico"
+                    value={form.email}
+                    onChange={(e) =>
+                        setForm({
+                            ...form,
+                            email: e.target.value,
                         })
                     }
                     className="border p-3 rounded"
