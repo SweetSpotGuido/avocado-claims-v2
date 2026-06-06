@@ -280,6 +280,14 @@ export default function AdminPage() {
                                         Esperando cliente
                                     </option>
 
+                                    <option value="Reembolso aprobado">
+                                        Reembolso aprobado
+                                    </option>
+
+                                    <option value="Reembolsado">
+                                        Reembolsado
+                                    </option>
+
                                     <option value="Resuelto">
                                         Resuelto
                                     </option>

@@ -161,6 +161,38 @@ export default function TicketDetailPage() {
                     </button>
                 </div>
 
+                {claim.refund_cvu && (
+                    <div className="mt-6 border rounded p-4">
+                        <h2 className="text-xl font-bold mb-3">
+                            Datos de reembolso
+                        </h2>
+
+                        <p>
+                            <strong>Titular:</strong>{' '}
+                            {claim.refund_holder}
+                        </p>
+
+                        <p>
+                            <strong>CVU / CBU:</strong>{' '}
+                            {claim.refund_cvu}
+                        </p>
+
+                        <p>
+                            <strong>Alias:</strong>{' '}
+                            {claim.refund_alias || '-'}
+                        </p>
+
+                        <p>
+                            <strong>Fecha:</strong>{' '}
+                            {claim.refund_requested_at
+                                ? new Date(
+                                    claim.refund_requested_at
+                                ).toLocaleString()
+                                : '-'}
+                        </p>
+                    </div>
+                )}
+
                 <a
                     href={`https://wa.me/${claim.whatsapp.replace(
                         /\D/g,
