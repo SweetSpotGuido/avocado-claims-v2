@@ -97,6 +97,31 @@ export default function AdminPage() {
             }
         }
 
+        if (newStatus === 'En revisión') {
+            const claim = claims.find(
+                (c: any) => c.id === claimId
+            )
+
+            if (claim?.email) {
+                await fetch(
+                    '/api/send-review-email',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type':
+                                'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: claim.email,
+                            customerName:
+                                claim.customer_name,
+                            ticketId: claim.id,
+                        }),
+                    }
+                )
+            }
+        }
+
         await supabase
             .from('claim_events')
             .insert([
