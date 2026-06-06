@@ -9,6 +9,7 @@ type Claim = {
     order_number: string
     customer_name: string
     whatsapp: string
+    email: string
     product_name: string
     issue: string
     image_url: string | null
@@ -69,6 +70,31 @@ export default function AdminPage() {
             alert('Error actualizando estado')
             console.error(error)
             return
+        }
+
+        if (newStatus === 'Reembolsado') {
+            const claim = claims.find(
+                (c) => c.id === claimId
+            )
+
+            if (claim?.email) {
+                await fetch(
+                    '/api/send-refund-email',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type':
+                                'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: claim.email,
+                            customerName:
+                                claim.customer_name,
+                            ticketId: claim.id,
+                        }),
+                    }
+                )
+            }
         }
 
         await supabase
