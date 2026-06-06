@@ -67,10 +67,22 @@ export default function SeguimientoPage() {
                         Ticket #{claim.id}
                     </h2>
 
-                    <p>
-                        <strong>Estado:</strong>{' '}
+                    <div>
+                        <strong>Estado:</strong><br />
                         {claim.status}
-                    </p>
+                    </div>
+
+                    {claim.customer_message && (
+                        <div className="mt-4 p-4 border rounded bg-zinc-100 dark:bg-zinc-800">
+                            <div className="font-bold text-zinc-900 dark:text-white">
+                                Última actualización:
+                            </div>
+
+                            <div className="mt-2 text-zinc-700 dark:text-zinc-200">
+                                {claim.customer_message}
+                            </div>
+                        </div>
+                    )}
 
                     <p className="mt-2">
                         <strong>Producto:</strong>{' '}
@@ -86,7 +98,7 @@ export default function SeguimientoPage() {
 
                     {claim.status ===
                         'Reembolso aprobado' && (
-                            <div className="mt-4 p-4 border rounded bg-yellow-50">
+                            <div className="mt-4 p-4 border rounded bg-yellow-100 text-gray-900">
                                 Tu caso fue aprobado para
                                 reembolso.
 

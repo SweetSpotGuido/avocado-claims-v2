@@ -11,6 +11,7 @@ export default function TicketDetailPage() {
     const [loading, setLoading] = useState(true)
     const [claim, setClaim] = useState<any>(null)
     const [notes, setNotes] = useState('')
+    const [customerMessage, setCustomerMessage] = useState('')
 
     useEffect(() => {
         loadTicket()
@@ -39,6 +40,9 @@ export default function TicketDetailPage() {
 
         setClaim(data)
         setNotes(data.internal_notes || '')
+        setCustomerMessage(
+            data.customer_message || ''
+        )
         setLoading(false)
     }
 
@@ -56,6 +60,22 @@ export default function TicketDetailPage() {
         }
 
         alert('Notas guardadas')
+    }
+
+    async function saveCustomerMessage() {
+        const { error } = await supabase
+            .from('claims')
+            .update({
+                customer_message: customerMessage,
+            })
+            .eq('id', claim.id)
+
+        if (error) {
+            alert('Error guardando mensaje')
+            return
+        }
+
+        alert('Mensaje guardado')
     }
 
     if (loading) {
@@ -158,6 +178,31 @@ export default function TicketDetailPage() {
                         className="mt-3 bg-blue-600 text-white px-4 py-2 rounded"
                     >
                         Guardar notas
+                    </button>
+                </div>
+
+                <div className="mt-8">
+                    <h2 className="text-xl font-bold mb-2">
+                        Mensaje para el cliente
+                    </h2>
+
+                    <textarea
+                        value={customerMessage}
+                        onChange={(e) =>
+                            setCustomerMessage(
+                                e.target.value
+                            )
+                        }
+                        rows={5}
+                        className="w-full border rounded p-3"
+                        placeholder="Mensaje visible para el cliente..."
+                    />
+
+                    <button
+                        onClick={saveCustomerMessage}
+                        className="mt-3 bg-green-600 text-white px-4 py-2 rounded"
+                    >
+                        Guardar mensaje
                     </button>
                 </div>
 
