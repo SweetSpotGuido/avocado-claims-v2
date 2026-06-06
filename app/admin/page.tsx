@@ -20,6 +20,7 @@ export default function AdminPage() {
 
     const [loading, setLoading] = useState(true)
     const [claims, setClaims] = useState<Claim[]>([])
+    const [search, setSearch] = useState('')
 
     useEffect(() => {
         checkSession()
@@ -79,6 +80,18 @@ export default function AdminPage() {
         )
     }
 
+    const filteredClaims = claims.filter((claim) =>
+        claim.order_number
+            ?.toLowerCase()
+            .includes(search.toLowerCase()) ||
+        claim.customer_name
+            ?.toLowerCase()
+            .includes(search.toLowerCase()) ||
+        claim.whatsapp
+            ?.toLowerCase()
+            .includes(search.toLowerCase())
+    )
+
     if (loading) {
         return (
             <div className="p-8">
@@ -102,6 +115,20 @@ export default function AdminPage() {
                 </button>
             </div>
 
+            <div className="mb-4">
+                <input
+                    type="text"
+                    placeholder="🔍 Buscar por orden, cliente o WhatsApp..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full border rounded p-3"
+                />
+            </div>
+
+            <p className="text-sm text-gray-500 mb-4">
+                {filteredClaims.length} tickets encontrados
+            </p>
+
             <table className="w-full border border-gray-300">
                 <thead>
                     <tr className="border-b bg-gray-100">
@@ -118,7 +145,7 @@ export default function AdminPage() {
                 </thead>
 
                 <tbody>
-                    {claims.map((claim) => (
+                    {filteredClaims.map((claim) => (
                         <tr
                             key={claim.id}
                             className="border-b"
