@@ -10,6 +10,9 @@ export default function TicketDetailPage() {
 
     const [loading, setLoading] = useState(true)
     const [claim, setClaim] = useState<any>(null)
+    const [carrier, setCarrier] = useState('')
+    const [trackingNumber, setTrackingNumber] = useState('')
+    const [labelUrl, setLabelUrl] = useState('')
     const [notes, setNotes] = useState('')
     const [customerMessage, setCustomerMessage] = useState('')
     const [events, setEvents] = useState<any[]>([])
@@ -51,11 +54,63 @@ export default function TicketDetailPage() {
         setEvents(eventsData || [])
 
         setClaim(data)
+        setCarrier(data.carrier || '')
+        setTrackingNumber(
+            data.tracking_number || ''
+        )
+        setLabelUrl(
+            data.return_label_url || ''
+        )
         setNotes(data.internal_notes || '')
         setCustomerMessage(
             data.customer_message || ''
         )
         setLoading(false)
+    }
+
+    async function saveLogistics() {
+        if (!claim) return
+
+        const { error } = await supabase
+            .from('claims')
+            .update({
+                carrier,
+                tracking_number: trackingNumber,
+                return_label_url: labelUrl,
+            })
+            .eq('id', claim.id)
+
+        if (error) {
+            alert('Error guardando logística')
+            return
+        }
+
+        const response = await fetch(
+            '/api/send-label-email',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type':
+                        'application/json',
+                },
+                body: JSON.stringify({
+                    email: claim.email,
+                    customerName:
+                        claim.customer_name,
+                    ticketId: claim.id,
+                    carrier,
+                    trackingNumber,
+                    labelUrl,
+                }),
+            }
+        )
+
+        console.log(
+            'EMAIL RESPONSE:',
+            await response.json()
+        )
+
+        alert('Logística guardada')
     }
 
     async function saveNotes() {
@@ -197,6 +252,50 @@ export default function TicketDetailPage() {
                     <h2 className="text-xl font-bold mb-2">
                         Notas internas
                     </h2>
+
+                    <div className="mt-8">
+                        <h2 className="text-xl font-bold mb-4">
+                            Logística
+                        </h2>
+
+                        <input
+                            value={carrier}
+                            onChange={(e) =>
+                                setCarrier(e.target.value)
+                            }
+                            placeholder="Transportista"
+                            className="w-full border p-3 rounded mb-3"
+                        />
+
+                        <input
+                            value={trackingNumber}
+                            onChange={(e) =>
+                                setTrackingNumber(
+                                    e.target.value
+                                )
+                            }
+                            placeholder="Tracking"
+                            className="w-full border p-3 rounded mb-3"
+                        />
+
+                        <input
+                            value={labelUrl}
+                            onChange={(e) =>
+                                setLabelUrl(
+                                    e.target.value
+                                )
+                            }
+                            placeholder="URL etiqueta PDF"
+                            className="w-full border p-3 rounded"
+                        />
+
+                        <button
+                            onClick={saveLogistics}
+                            className="mt-3 bg-blue-600 text-white px-4 py-2 rounded"
+                        >
+                            Guardar logística
+                        </button>
+                    </div>
 
                     <div className="mt-8">
                         <h2 className="text-xl font-bold mb-3">

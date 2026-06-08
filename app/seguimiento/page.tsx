@@ -70,6 +70,36 @@ export default function SeguimientoPage() {
                     <div>
                         <strong>Estado:</strong><br />
                         {claim.status}
+                        {claim.carrier && (
+                            <div className="mt-4">
+                                <strong>
+                                    Transportista:
+                                </strong>
+                                <br />
+                                {claim.carrier}
+                            </div>
+                        )}
+
+                        {claim.tracking_number && (
+                            <div className="mt-4">
+                                <strong>Tracking:</strong>
+                                <br />
+                                {claim.tracking_number}
+                            </div>
+                        )}
+
+                        {claim.return_label_url && (
+                            <div className="mt-4">
+                                <a
+                                    href={claim.return_label_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-blue-600 text-white px-4 py-2 rounded inline-block"
+                                >
+                                    Descargar etiqueta
+                                </a>
+                            </div>
+                        )}
                     </div>
 
                     {claim.customer_message && (
