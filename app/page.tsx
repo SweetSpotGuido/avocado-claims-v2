@@ -123,7 +123,7 @@ export default function Home() {
                 </h1>
 
                 <p className="mb-4">
-                    Gracias por contactarte con Avocado Claims.
+                    Gracias por contactarte con el equipo de Avocado.
                 </p>
 
                 <div className="border rounded p-6 text-2xl font-bold">
@@ -140,7 +140,7 @@ export default function Home() {
     return (
         <main className="max-w-xl mx-auto p-8">
             <h1 className="text-3xl font-bold mb-6">
-                Avocado Claims
+                Centro de Reclamos de Avocado
             </h1>
 
             <form
@@ -226,13 +226,56 @@ export default function Home() {
                 />
 
                 <div>
-                    <label className="block mb-2">
+                    <label className="block mb-3 text-lg font-medium">
                         Foto del problema
                     </label>
 
+                    <label
+                        htmlFor="image-upload"
+                        className="
+            flex items-center gap-4
+            border-2 border-dashed border-zinc-700
+            rounded-xl
+            p-5
+            cursor-pointer
+            hover:border-green-500
+            transition-all
+        "
+                    >
+                        <div
+                            className="
+                w-16 h-16
+                rounded-xl
+                border border-green-500
+                flex items-center justify-center
+                text-3xl
+            "
+                        >
+                            📤
+                        </div>
+
+                        <div>
+                            <p className="text-lg font-medium">
+                                Elegir archivo
+                            </p>
+
+                            <p className="text-sm text-zinc-400">
+                                JPG, PNG o WEBP · Máx. 10 MB
+                            </p>
+
+                            {image && (
+                                <p className="text-green-500 text-sm mt-1">
+                                    ✓ {image.name}
+                                </p>
+                            )}
+                        </div>
+                    </label>
+
                     <input
+                        id="image-upload"
                         type="file"
                         accept="image/*"
+                        className="hidden"
                         onChange={(e) => {
                             if (e.target.files?.[0]) {
                                 setImage(e.target.files[0])
@@ -244,7 +287,17 @@ export default function Home() {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="bg-black text-white p-3 rounded"
+                    className="
+        w-full
+        bg-green-700
+        hover:bg-green-800
+        text-white
+        font-semibold
+        p-4
+        rounded-xl
+        transition
+        disabled:opacity-50
+    "
                 >
                     {loading ? 'Enviando...' : 'Enviar reclamo'}
                 </button>
