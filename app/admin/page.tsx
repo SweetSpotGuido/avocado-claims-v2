@@ -97,6 +97,34 @@ export default function AdminPage() {
             }
         }
 
+        if (
+            newStatus ===
+            'Reembolso aprobado'
+        ) {
+            const claim = claims.find(
+                (c: any) => c.id === claimId
+            )
+
+            if (claim?.email) {
+                await fetch(
+                    '/api/send-refund-approved-email',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type':
+                                'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: claim.email,
+                            customerName:
+                                claim.customer_name,
+                            ticketId: claim.id,
+                        }),
+                    }
+                )
+            }
+        }
+
         if (newStatus === 'En revisión') {
             const claim = claims.find(
                 (c: any) => c.id === claimId
