@@ -14,6 +14,7 @@ type Claim = {
     issue: string
     image_url: string | null
     status: string
+    public_token: string | null
 }
 
 export default function AdminPage() {
@@ -77,6 +78,8 @@ export default function AdminPage() {
                 (c) => c.id === claimId
             )
 
+            console.log(claim)
+
             if (claim?.email) {
                 await fetch(
                     '/api/send-refund-email',
@@ -91,6 +94,8 @@ export default function AdminPage() {
                             customerName:
                                 claim.customer_name,
                             ticketId: claim.id,
+                            ticketToken:
+                                claim.public_token,
                         }),
                     }
                 )
@@ -104,6 +109,8 @@ export default function AdminPage() {
             const claim = claims.find(
                 (c: any) => c.id === claimId
             )
+
+            console.log(claim)
 
             if (claim?.email) {
                 await fetch(
@@ -119,6 +126,8 @@ export default function AdminPage() {
                             customerName:
                                 claim.customer_name,
                             ticketId: claim.id,
+                            ticketToken:
+                                claim.public_token,
                         }),
                     }
                 )
@@ -129,6 +138,8 @@ export default function AdminPage() {
             const claim = claims.find(
                 (c: any) => c.id === claimId
             )
+
+            console.log(claim)
 
             if (claim?.email) {
                 await fetch(
@@ -144,6 +155,8 @@ export default function AdminPage() {
                             customerName:
                                 claim.customer_name,
                             ticketId: claim.id,
+                            ticketToken:
+                                claim.public_token,
                         }),
                     }
                 )
