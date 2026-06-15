@@ -14,6 +14,7 @@ export async function POST(
             email,
             customerName,
             ticketId,
+            ticketToken,
         } = body
 
         console.log(
@@ -39,14 +40,14 @@ export async function POST(
         </p>
 
         <p>
-          Puedes consultar el estado aquí:
-        </p>
+  Puedes seguir tu caso desde el siguiente enlace:
+</p>
 
-        <p>
-          <a href="https://avocado-claims-v2-xoip.vercel.app/seguimiento">
-            Consultar ticket
-          </a>
-        </p>
+<p>
+  <a href="https://avocado-claims-v2-xoip.vercel.app/ticket/${ticketToken}">
+    🔎 Ver mi caso
+  </a>
+</p>
 
         <p>
           Gracias por contactarte con

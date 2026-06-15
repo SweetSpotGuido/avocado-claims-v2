@@ -9,6 +9,7 @@ export default function Home() {
     const [ticketNumber, setTicketNumber] = useState<number | null>(null)
     const [image, setImage] = useState<File | null>(null)
 
+
     const [form, setForm] = useState({
         order_number: '',
         customer_name: '',
@@ -48,6 +49,9 @@ export default function Home() {
             imageUrl = data.publicUrl
         }
 
+        const publicToken =
+            crypto.randomUUID().replace(/-/g, '')
+
         const { data, error } = await supabase
             .from('claims')
             .insert([
@@ -59,6 +63,7 @@ export default function Home() {
                     product_name: form.product_name,
                     issue: form.issue,
                     image_url: imageUrl,
+                    public_token: publicToken,
                 },
             ])
             .select()
@@ -87,6 +92,7 @@ export default function Home() {
                     customerName:
                         form.customer_name,
                     ticketId: data.id,
+                    ticketToken: publicToken,
                 }),
             }
         )
