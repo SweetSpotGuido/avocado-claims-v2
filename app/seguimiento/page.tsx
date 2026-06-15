@@ -2,17 +2,11 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { useSearchParams } from 'next/navigation'
 
 export default function SeguimientoPage() {
     const [claim, setClaim] = useState<any>(null)
     const [loading, setLoading] = useState(false)
-    const searchParams =
-        useSearchParams()
-    const [ticketId, setTicketId] =
-        useState(
-            searchParams.get('ticket') || ''
-        )
+    const [ticketId, setTicketId] = useState('')
 
     async function searchTicket(
         e: React.FormEvent
