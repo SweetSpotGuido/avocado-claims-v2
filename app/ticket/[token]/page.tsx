@@ -90,10 +90,83 @@ export default function TicketPage({
                     {claim.id}
                 </p>
 
-                <p>
-                    <strong>Estado:</strong>{' '}
-                    {claim.status}
-                </p>
+                <div>
+
+                    <strong>Estado:</strong>
+
+                    <div className="mt-2">
+
+                        {claim.status === 'Abierto' && (
+                            <span className="bg-gray-200 px-3 py-1 rounded-full">
+                                📋 Abierto
+                            </span>
+                        )}
+
+                        {claim.status === 'En revisión' && (
+                            <span className="bg-yellow-200 px-3 py-1 rounded-full">
+                                🔍 En revisión
+                            </span>
+                        )}
+
+                        {claim.status ===
+                            'Reembolso aprobado' && (
+                                <div className="
+        mt-4
+        border
+        border-green-300
+        bg-green-50
+        rounded-xl
+        p-4
+    ">
+                                    <h3 className="font-bold text-green-700">
+                                        💰 Reembolso aprobado
+                                    </h3>
+
+                                    <p className="mt-2">
+                                        Hemos aprobado tu solicitud
+                                        de reembolso.
+                                    </p>
+
+                                    <p className="mt-2">
+                                        Si aún no lo hiciste,
+                                        ingresa los datos de la
+                                        cuenta donde deseas
+                                        recibir el dinero.
+                                    </p>
+
+                                    <a
+                                        href={`/reembolso?ticket=${claim.id}`}
+                                        className="
+        inline-block
+        mt-4
+        bg-green-700
+        text-white
+        px-4
+        py-2
+        rounded-lg
+    "
+                                    >
+                                        Completar datos de reembolso
+                                    </a>
+
+                                </div>
+                            )}
+
+                        {claim.status === 'Reembolsado' && (
+                            <span className="bg-green-500 text-white px-3 py-1 rounded-full">
+                                💸 Reembolsado
+                            </span>
+                        )}
+
+                        {claim.status === 'Resuelto' && (
+                            <span className="bg-blue-200 px-3 py-1 rounded-full">
+                                ✅ Resuelto
+                            </span>
+                        )}
+
+                    </div>
+
+                </div>
 
                 <p>
                     <strong>Producto:</strong>{' '}
@@ -138,12 +211,46 @@ export default function TicketPage({
                     </div>
                 )}
 
-                {claim.tracking_number && (
-                    <div>
-                        <strong>
-                            Tracking:
-                        </strong>{' '}
-                        {claim.tracking_number}
+                {claim.carrier && (
+                    <div className="border rounded-lg p-4 bg-zinc-50">
+
+                        <p>
+                            <strong>
+                                Transportista:
+                            </strong>{' '}
+                            {claim.carrier}
+                        </p>
+
+                        {claim.tracking_number && (
+                            <p className="mt-2">
+                                <strong>
+                                    Tracking:
+                                </strong>{' '}
+                                {claim.tracking_number}
+                            </p>
+                        )}
+
+                        {claim.carrier ===
+                            'Correo Argentino' &&
+                            claim.tracking_number && (
+                                <a
+                                    href={`https://www.correoargentino.com.ar/formularios/e-commerce?id=${claim.tracking_number}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="
+                        inline-block
+                        mt-3
+                        bg-blue-600
+                        hover:bg-blue-700
+                        text-white
+                        px-4
+                        py-2
+                        rounded-lg
+                    "
+                                >
+                                    🔍 Rastrear envío
+                                </a>
+                            )}
                     </div>
                 )}
 
