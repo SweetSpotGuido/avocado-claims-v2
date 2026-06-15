@@ -83,7 +83,7 @@ export default function TicketPage({
                 Seguimiento de reclamo
             </h1>
 
-            <div className="border rounded-xl p-6 space-y-4">
+            <div className=" mt-4 border border-green-500 bg-gradient-to-r from-green-950 to-zinc-900 rounded-xl p-5 ">
 
                 <p>
                     <strong>Ticket:</strong> #
@@ -94,40 +94,33 @@ export default function TicketPage({
 
                     <strong>Estado:</strong>
 
-                    <div className="mt-2">
+                    <div className=" mt-4 border border-green-500 bg-gradient-to-r from-green-950 to-zinc-900 rounded-xl p-5 ">
 
                         {claim.status === 'Abierto' && (
-                            <span className="bg-gray-200 px-3 py-1 rounded-full">
+                            <span className=" font-bold text-green-400 text-xl ">
                                 📋 Abierto
                             </span>
                         )}
 
                         {claim.status === 'En revisión' && (
-                            <span className="bg-yellow-200 px-3 py-1 rounded-full">
+                            <span className=" font-bold text-green-400 text-xl ">
                                 🔍 En revisión
                             </span>
                         )}
 
                         {claim.status ===
                             'Reembolso aprobado' && (
-                                <div className="
-        mt-4
-        border
-        border-green-300
-        bg-green-50
-        rounded-xl
-        p-4
-    ">
-                                    <h3 className="font-bold text-green-700">
+                                <div className=" mt-4 border border-green-500 bg-gradient-to-r from-green-950 to-zinc-900 rounded-xl p-5 ">
+                                    <h3 className=" font-bold text-green-400 text-xl ">
                                         💰 Reembolso aprobado
                                     </h3>
 
-                                    <p className="mt-2">
+                                    <p className="mt-2 text-zinc-200">
                                         Hemos aprobado tu solicitud
                                         de reembolso.
                                     </p>
 
-                                    <p className="mt-2">
+                                    <p className="mt-2 text-zinc-200">
                                         Si aún no lo hiciste,
                                         ingresa los datos de la
                                         cuenta donde deseas
@@ -191,12 +184,12 @@ export default function TicketPage({
                 )}
 
                 {claim.customer_message && (
-                    <div className="border rounded p-4 bg-zinc-50">
+                    <div className=" mt-4 border border-green-500 bg-gradient-to-r from-green-950 to-zinc-900 rounded-xl p-5 ">
                         <strong>
                             Última actualización
                         </strong>
 
-                        <p className="mt-2">
+                        <p className="mt-2 text-zinc-200">
                             {claim.customer_message}
                         </p>
                     </div>
@@ -212,7 +205,7 @@ export default function TicketPage({
                 )}
 
                 {claim.carrier && (
-                    <div className="border rounded-lg p-4 bg-zinc-50">
+                    <div className=" mt-4 border border-green-500 bg-gradient-to-r from-green-950 to-zinc-900 rounded-xl p-5 ">
 
                         <p>
                             <strong>
@@ -222,7 +215,7 @@ export default function TicketPage({
                         </p>
 
                         {claim.tracking_number && (
-                            <p className="mt-2">
+                            <p className="mt-2 text-zinc-200">
                                 <strong>
                                     Tracking:
                                 </strong>{' '}
