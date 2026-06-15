@@ -12,6 +12,7 @@ export async function POST(
             email,
             customerName,
             ticketId,
+            ticketToken,
         } = await req.json()
 
         const result =
@@ -47,7 +48,7 @@ export async function POST(
           </p>
 
           <p>
-            <a href="https://avocado-claims-v2-xoip.vercel.app/seguimiento">
+            <a href="https://avocado-claims-v2-xoip.vercel.app/ticket/${ticketToken}">
                 Consultar ticket
           </a>
           </p>
