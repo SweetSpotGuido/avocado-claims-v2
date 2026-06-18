@@ -15,6 +15,7 @@ type Claim = {
     image_url: string | null
     status: string
     public_token: string | null
+    return_label_url?: string | null
 }
 
 export default function AdminPage() {
@@ -157,6 +158,39 @@ export default function AdminPage() {
                             ticketId: claim.id,
                             ticketToken:
                                 claim.public_token,
+                        }),
+                    }
+                )
+            }
+        }
+
+        if (
+            newStatus ===
+            'Devolución habilitada'
+        ) {
+            const claim = claims.find(
+                (c: any) => c.id === claimId
+            )
+
+            if (claim?.email) {
+
+                await fetch(
+                    '/api/send-return-email',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type':
+                                'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: claim.email,
+                            customerName:
+                                claim.customer_name,
+                            ticketId: claim.id,
+                            ticketToken:
+                                claim.public_token,
+                            labelUrl:
+                                claim.return_label_url,
                         }),
                     }
                 )
@@ -376,6 +410,10 @@ export default function AdminPage() {
 
                                     <option value="En revisión">
                                         En revisión
+                                    </option>
+
+                                    <option value="Devolución habilitada">
+                                        Devolución habilitada
                                     </option>
 
                                     <option value="Esperando cliente">

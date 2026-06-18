@@ -18,6 +18,7 @@ type Claim = {
     carrier?: string | null
     tracking_number?: string | null
     return_label_url?: string | null
+    public_token?: string | null
 }
 
 export default function TicketPage({
@@ -109,6 +110,63 @@ export default function TicketPage({
                         )}
 
                         {claim.status ===
+                            'Devolución habilitada' && (
+                                <div
+                                    className="
+            mt-4
+            border
+            border-blue-500
+            bg-gradient-to-r
+            from-blue-950
+            to-zinc-900
+            rounded-xl
+            p-5
+        "
+                                >
+                                    <h3
+                                        className="
+                font-bold
+                text-blue-400
+                text-xl
+            "
+                                    >
+                                        📦 Devolución habilitada
+                                    </h3>
+
+                                    <p className="mt-2 text-zinc-200">
+                                        Tu devolución fue aprobada.
+                                    </p>
+
+                                    <p className="mt-2 text-zinc-200">
+                                        Descarga la etiqueta,
+                                        imprímela y entrega el
+                                        paquete en Correo Argentino.
+                                    </p>
+
+                                    {claim.return_label_url && (
+                                        <a
+                                            href={claim.return_label_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="
+                    inline-block
+                    mt-4
+                    bg-blue-600
+                    hover:bg-blue-700
+                    text-white
+                    px-5
+                    py-3
+                    rounded-lg
+                    font-medium
+                "
+                                        >
+                                            📄 Descargar etiqueta
+                                        </a>
+                                    )}
+                                </div>
+                            )}
+
+                        {claim.status ===
                             'Reembolso aprobado' && (
                                 <div className=" mt-4 border border-green-500 bg-gradient-to-r from-green-950 to-zinc-900 rounded-xl p-5 ">
                                     <h3 className=" font-bold text-green-400 text-xl ">
@@ -146,9 +204,28 @@ export default function TicketPage({
                             )}
 
                         {claim.status === 'Reembolsado' && (
-                            <span className="bg-green-500 text-white px-3 py-1 rounded-full">
-                                💸 Reembolsado
-                            </span>
+                            <div className="
+    mt-4
+    border
+    border-green-500
+    bg-gradient-to-r
+    from-green-950
+    to-zinc-900
+    rounded-xl
+    p-5
+">
+                                <h3 className="
+        font-bold
+        text-green-400
+        text-xl
+    ">
+                                    💸 Reembolso realizado
+                                </h3>
+
+                                <p className="mt-2 text-zinc-200">
+                                    La transferencia fue procesada correctamente.
+                                </p>
+                            </div>
                         )}
 
                         {claim.status === 'Resuelto' && (
@@ -196,15 +273,6 @@ export default function TicketPage({
                 )}
 
                 {claim.carrier && (
-                    <div>
-                        <strong>
-                            Transportista:
-                        </strong>{' '}
-                        {claim.carrier}
-                    </div>
-                )}
-
-                {claim.carrier && (
                     <div className=" mt-4 border border-green-500 bg-gradient-to-r from-green-950 to-zinc-900 rounded-xl p-5 ">
 
                         <p>
@@ -246,18 +314,6 @@ export default function TicketPage({
                             )}
                     </div>
                 )}
-
-                {claim.return_label_url && (
-                    <a
-                        href={claim.return_label_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block bg-green-700 text-white px-4 py-2 rounded"
-                    >
-                        Descargar etiqueta
-                    </a>
-                )}
-
             </div>
 
         </main>
